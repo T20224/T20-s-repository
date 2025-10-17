@@ -1,4 +1,11 @@
 # app.py
+'''
+基于Flask+Ollama实现的可对话网页
+加了一个css文件让整个网页图形化，并且有删除聊天记录和更换所用模型的功能（实装的只有deep seek-r1:7b）
+做网页绕不开Java，实在没学过就只能一字不改了
+有各种报错机制，服务器状态异常会报错，模型加载会报错，Ollama服务异常会报错，网络错误会报错......
+总之整体还是比较精美的
+'''
 from flask import Flask, render_template, request, jsonify
 import requests
 import json
@@ -160,4 +167,5 @@ if __name__ == '__main__':
     print("🚀 启动Ollama对话网页...")
     print(f"📚 可用模型: {', '.join(agent.get_models())}")
     print("🌐 访问 http://localhost:5000 开始聊天")
+
     app.run(debug=True, host='0.0.0.0', port=5000)
