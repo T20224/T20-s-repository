@@ -1,0 +1,61 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ollama AI对话助手</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 Ollama AI助手</h1>
+            <p>基于本地AI模型的智能对话</p >
+            <div class="status" id="status">
+                <span class="status-dot" id="status-dot"></span>
+                <span id="status-text">检查服务状态...</span>
+            </div>
+        </header>
+
+        <div class="controls">
+            <div class="model-selector">
+                <label for="model-select">选择模型:</label>
+                <select id="model-select">
+                    {% for model in models %}
+                    <option value="{{ model }}">{{ model }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="chat-container">
+            <div id="chat-messages" class="chat-messages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        <strong>AI助手:</strong> 您好！我是基于Ollama的AI助手。选择模型后就可以开始对话了！
+                    </div>
+                    <div class="message-time" id="welcome-time"></div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-group">
+                    <input type="text" id="user-input" placeholder="输入您的问题..." maxlength="1000">
+                    <button id="send-btn">发送</button>
+                </div>
+                <div class="controls">
+                    <button id="clear-btn">清空对话</button>
+                    <span id="char-count">0/1000</span>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Powered by Ollama | 本地AI | 按Enter发送消息</p >
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
