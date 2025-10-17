@@ -1,4 +1,7 @@
-/* static/style.css */
+/* static/style.css 
+莫名其妙的css文件，让整个网页更漂亮了
+自己调了一下色
+*/
 * {
     margin: 0;
     padding: 0;
@@ -304,4 +307,5 @@ footer {
     .model-selector select {
         min-width: 100%;
     }
+
 }
