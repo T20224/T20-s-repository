@@ -1,0 +1,465 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI创意工坊</title>
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #f31974ff 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4facfe 0%, #0ceb31ff 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .tab-button.active {
+            color: #4facfe;
+            border-bottom-color: #0ff622ff;
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .generator-section {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .generator-section h3 {
+            margin-bottom: 15px;
+            color: #495057;
+            font-size: 1.5em;
+        }
+
+        .generator-section p {
+            color: #6c757d;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+            margin-bottom: 15px;
+        }
+
+        textarea:focus {
+            border-color: #4facfe;
+            outline: none;
+        }
+
+        .model-selector {
+            margin-bottom: 15px;
+        }
+
+        select {
+            padding: 10px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00fe83ff 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-bottom: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .example-prompts {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .example-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .example-tag:hover {
+            background: #bbdefb;
+        }
+
+        .result-area {
+            border: 2px dashed #e1e5e9;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            background: #f8f9fa;
+            margin-bottom: 20px;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-area img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .music-description, .video-description {
+            text-align: left;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .music-description h4, .video-description h4 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .music-meta {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e1e5e9;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .status {
+            text-align: center;
+            color: #6c757d;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .status.success {
+            color: #28a745;
+        }
+
+        .status.error {
+            color: #dc3545;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #6c757d;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 10px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .tab-content {
+                padding: 20px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .examples {
+                flex-direction: column;
+            }
+            
+            .example-tag {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI创意工坊</h1>
+            <p>使用已验证可工作的模型生成图片</p >
+        </header>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="image">图片生成</button>
+            <button class="tab-button" data-tab="music">音乐生成</button>
+        </div>
+
+        <!-- 图片生成标签页 -->
+        <div id="image-tab" class="tab-content active">
+            <div class="generator-section">
+                <h3>AI图片生成</h3>
+                <p>使用已验证可工作的模型生成图片</p >
+                
+                <div class="model-selector">
+                    <label>选择模型:</label>
+                    <select id="image-model">
+                        {% for model in models %}
+                        <option value="{{ model.value }}">{{ model.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <textarea id="image-prompt" placeholder="例如：一个在森林中漫步的机器人，夕阳西下，梦幻风格..."></textarea>
+                    <button class="generate-btn" id="generate-image-btn">生成图片</button>
+                </div>
+                
+                <div class="example-prompts">
+                    <strong>示例提示词：</strong>
+                    <div class="examples">
+                        <div class="example-tag">星空下的魔法城堡</div>
+                        <div class="example-tag">赛博朋克城市夜景</div>
+                        <div class="example-tag">水墨风格山水画</div>
+                        <div class="example-tag">未来科技实验室</div>
+                        <div class="example-tag">可爱卡通动物</div>
+                    </div>
+                </div>
+                
+                <div class="result-area" id="image-result">
+                    <div class="placeholder">
+                        <p>生成的图片将显示在这里</p >
+                    </div>
+                </div>
+                
+                <div class="status" id="image-status">准备生成...</div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Powered by Hugging Face API | 已验证可工作的模型</p >
+        </footer>
+    </div>
+
+    <script>
+        class WorkingAICreativeStudio {
+            constructor() {
+                this.currentTab = 'image';
+                this.init();
+            }
+
+            init() {
+                this.setupTabSwitching();
+                this.setupEventListeners();
+                this.setupExampleClicks();
+            }
+
+            setupTabSwitching() {
+                const tabButtons = document.querySelectorAll('.tab-button');
+                
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const tabName = button.getAttribute('data-tab');
+                        this.switchTab(tabName);
+                    });
+                });
+            }
+
+            switchTab(tabName) {
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+                
+                this.currentTab = tabName;
+            }
+
+            setupEventListeners() {
+                document.getElementById('generate-image-btn').addEventListener('click', () => {
+                    this.generateImage();
+                });
+
+                document.getElementById('generate-music-btn').addEventListener('click', () => {
+                    this.generateMusic();
+                });
+            }
+
+            setupExampleClicks() {
+                document.querySelectorAll('#image-tab .example-tag').forEach(tag => {
+                    tag.addEventListener('click', () => {
+                        document.getElementById('image-prompt').value = tag.textContent;
+                    });
+                });
+                
+                document.querySelectorAll('#music-tab .example-tag').forEach(tag => {
+                    tag.addEventListener('click', () => {
+                        document.getElementById('music-prompt').value = tag.textContent;
+                    });
+                });
+            }
+
+            async generateImage() {
+                const prompt = document.getElementById('image-prompt').value.trim();
+                const modelIndex = document.getElementById('image-model').value;
+                const generateBtn = document.getElementById('generate-image-btn');
+                const statusElement = document.getElementById('image-status');
+                const resultArea = document.getElementById('image-result');
+                
+                if (!prompt) {
+                    alert('请输入图片描述');
+                    return;
+                }
+                
+                generateBtn.disabled = true;
+                generateBtn.textContent = '生成中...';
+                statusElement.textContent = 'AI正在创作，请稍候...';
+                statusElement.className = 'status';
+                
+                try {
+                    const response = await fetch('/api/generate_image', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            prompt: prompt,
+                            model_index: parseInt(modelIndex)
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        resultArea.innerHTML = `<img src="${data.image_data}" alt="生成的图片" style="max-width: 100%; max-height: 400px; border-radius: 8px;">`;
+                        statusElement.textContent = `${data.message}`;
+                        statusElement.className = 'status success';
+                    } else {
+                        statusElement.textContent = `${data.error}`;
+                        statusElement.className = 'status error';
+                    }
+                    
+                } catch (error) {
+                    statusElement.textContent = `请求失败: ${error.message}`;
+                    statusElement.className = 'status error';
+                } finally {
+                    generateBtn.disabled = false;
+                    generateBtn.textContent = '生成图片';
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new WorkingAICreativeStudio();
+        });
+    </script>
+</body>
+</html>
